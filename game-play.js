@@ -10,8 +10,9 @@ class GamePlay {
     this.firstUserId = firstUserId;
     this.secondUserId = secondUserId;
     this.matrix =
-      JSON.parse(matrix) ||
-      Array.from(Array(n)).map((x, i) => Array.from(Array(m)));
+      matrix && JSON.parse(matrix).length === n
+        ? JSON.parse(matrix)
+        : Array.from(Array(n)).map((x, i) => Array.from(Array(m)));
   }
 
   isValidMove(columnNumber) {
@@ -121,13 +122,13 @@ class GamePlay {
           this.rowNumber = i;
           if (move % 2 === 0) {
             column[columnNumber - 1] = red;
-            await this.upsertData(this.firstUserId,move);
+            await this.upsertData(this.secondUserId, move);
             if (this.hasWon(red, columnNumber)) {
               this.winner = `${red} wins`;
             }
           } else {
             column[columnNumber - 1] = yellow;
-            await this.upsertData(this.secondUserId,move);
+            await this.upsertData(this.firstUserId, move);
             if (this.hasWon(yellow, columnNumber)) {
               this.winner = `${yellow} wins`;
             }
